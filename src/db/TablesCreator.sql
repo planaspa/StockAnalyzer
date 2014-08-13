@@ -1,6 +1,7 @@
-/* Values in the stock market */
-CREATE TABLE Values(
+/* FinancialElements in the stock market */
+CREATE TABLE FinancialElements(
 ticker varchar (20),
+name varchar (100) NOT NULL,
 region varchar (100) NOT NULL,
 PRIMARY KEY (ticker)
 );
@@ -14,7 +15,7 @@ maximum float NOT NULL,
 open float NOT NULL,
 close float NOT NULL,
 volume int,
-FOREIGN KEY (ticker) REFERENCES Values(ticker),
+FOREIGN KEY (ticker) REFERENCES FinancialElements(ticker),
 PRIMARY KEY (ticker,day)
 );
 
@@ -22,7 +23,7 @@ PRIMARY KEY (ticker,day)
 CREATE TABLE Sectors(
 ticker varchar (20),
 sector varchar (100),
-FOREIGN KEY (ticker) REFERENCES Values(ticker),
+FOREIGN KEY (ticker) REFERENCES FinancialElements(ticker),
 PRIMARY KEY (ticker,sector)
 );
 
@@ -30,7 +31,7 @@ PRIMARY KEY (ticker,sector)
 CREATE TABLE Indexes(
 tickerCompany varchar (20),
 tickerIndex varchar (20),
-FOREIGN KEY (tickerCompany) REFERENCES Values(ticker),
-FOREIGN KEY (tickerIndex) REFERENCES Values(ticker),
+FOREIGN KEY (tickerCompany) REFERENCES FinancialElements(ticker),
+FOREIGN KEY (tickerIndex) REFERENCES FinancialElements(ticker),
 PRIMARY KEY (tickerCompany,tickerIndex)
 );
