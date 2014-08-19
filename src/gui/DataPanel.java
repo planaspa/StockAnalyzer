@@ -44,7 +44,7 @@ public class DataPanel extends JPanel {
 
 		String temp = fillWindow("SELECT ticker FROM financialElements");
 		
-		if (temp.equals(null)) temp = "No data available";
+		if (temp.equals("")) temp = "No data available";
 
 		setText(temp);
 	}

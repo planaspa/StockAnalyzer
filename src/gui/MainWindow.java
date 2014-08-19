@@ -14,14 +14,14 @@ public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private DataPanel data;
-	private ChartPanel chart;
+	private ChartsPanel chart;
 	   
 	public MainWindow() {
 
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		BorderLayout layout = new BorderLayout();
-		chart = new ChartPanel();
+		chart = new ChartsPanel();
 		data = new DataPanel();
 		
 		data.updateList();
