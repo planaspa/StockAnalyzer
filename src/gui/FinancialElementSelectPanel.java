@@ -8,53 +8,44 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
-public class DataPanel extends JPanel {
+public class FinancialElementSelectPanel extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JTextArea text;
 	
-	public DataPanel(){
+	private JComboBox<String> dropdown;
+	
+	public FinancialElementSelectPanel () {
 		
-		text = new JTextArea();
-		text.setEditable(false);
 		BorderLayout layout= new BorderLayout();
 		this.setLayout(layout);
-		JScrollPane pane = new JScrollPane(text);
-		TitledBorder title = BorderFactory.createTitledBorder("Data");
-		pane.setBorder(title);
 		
-		this.add(pane,BorderLayout.CENTER);
-		this.setPreferredSize(new Dimension(200,400));
-	}
-	
-	public void setText(String t){
-		text.setText(t);
-	}
-	
-	public void updateList(){
+		String[] content = loadFinancialElements();	
 		
+		dropdown = new JComboBox<String>(content);
+		
+		TitledBorder title = 
+				BorderFactory.createTitledBorder("Financial Element Selection");
+		dropdown.setBorder(title);
+		
+		this.add(dropdown,BorderLayout.CENTER);
+		this.setPreferredSize(new Dimension(200,50));
 
-		String temp = fillWindow("SELECT ticker FROM financialElements");
-		
-		if (temp.equals("")) temp = "No data available";
-
-		setText(temp);
 	}
 	
-	private String fillWindow (String sql){
+	private String[] loadFinancialElements (){
 		
-	    Connection c = null;
+		String [] output = null;
+		
+		Connection c = null;
 	    Statement stmt = null;
 	    ResultSet rs = null;
-	    String output="";
 		
 	    try {
 		      Class.forName("org.sqlite.JDBC");
@@ -62,10 +53,14 @@ public class DataPanel extends JPanel {
 		      System.out.println("Database successfully opened");
 		      
 		      stmt = c.createStatement();
+		      rs = stmt.executeQuery(
+		    		  "SELECT count(ticker) FROM FinancialElements");
+		      output = new String [rs.getInt(1)];
 		      
-		      rs = stmt.executeQuery(sql);
+		      rs = stmt.executeQuery("SELECT ticker FROM FinancialElements");
 		      
-		      while (rs.next()) output+=rs.getString(1) + "\n";
+		      for (int i=0; rs.next(); i++) 
+		    	  output[i] = rs.getString(1);
 		      
 		      stmt.close();
 		      c.close();
@@ -74,7 +69,8 @@ public class DataPanel extends JPanel {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
 		}
-	    
-	    return output;
+		
+		return output;		
 	}
+
 }
